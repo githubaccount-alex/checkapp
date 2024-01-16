@@ -14,10 +14,10 @@ class InitVorlageForNewObjectEvent extends ObjektEvent {
   InitVorlageForNewObjectEvent({required this.vorlageEntity});
 }
 
-class NewObjektForVorlageEvent extends ObjektEvent {
+class CreateNewObjektForVorlageEvent extends ObjektEvent {
   final VorlageEntity vorlageEntity;
   final ObjektEntity objektEntity;
-  NewObjektForVorlageEvent({required this.vorlageEntity, required this.objektEntity});
+  CreateNewObjektForVorlageEvent({required this.vorlageEntity, required this.objektEntity});
 }
 
 class DeleteObjektFromVorlageEvent extends ObjektEvent {

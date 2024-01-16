@@ -9,7 +9,7 @@ class UniqueID {
     return UniqueID._(const Uuid().v1());
   }
 
-  factory UniqueID.fromUniqueString(String uniqueID) {
+  factory UniqueID.fromString(String uniqueID) {
     return UniqueID._(uniqueID);
   }
 }

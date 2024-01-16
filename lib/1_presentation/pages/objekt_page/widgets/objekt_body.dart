@@ -66,12 +66,10 @@ class _ObjektBodyState extends State<ObjektBody> {
           ElevatedButton(
               onPressed: () {
                 if (widget.objektEntity == null) {
-                  ObjektEntity objekt =
-                      ObjektEntity(id: UniqueID(), titel: _titelController.text, beschreibung: _beschreibungController.text, verantwortlicher: _verantwortlicherController.text, kommentar: null);
-                  objektBloc.add(NewObjektForVorlageEvent(vorlageEntity: widget.vorlageEntity, objektEntity: objekt));
+                  ObjektEntity objekt = ObjektEntity(id: UniqueID(), titel: _titelController.text, beschreibung: _beschreibungController.text, verantwortlicher: _verantwortlicherController.text, kommentar: null);
+                  objektBloc.add(CreateNewObjektForVorlageEvent(vorlageEntity: widget.vorlageEntity, objektEntity: objekt));
                 } else {
-                  ObjektEntity objekt = ObjektEntity(
-                      id: widget.objektEntity!.id, titel: _titelController.text, beschreibung: _beschreibungController.text, verantwortlicher: _verantwortlicherController.text, kommentar: null);
+                  ObjektEntity objekt = ObjektEntity(id: widget.objektEntity!.id, titel: _titelController.text, beschreibung: _beschreibungController.text, verantwortlicher: _verantwortlicherController.text, kommentar: null);
                   objektBloc.add(EditObjektFromVorlageEvent(vorlageEntity: widget.vorlageEntity, objektEntity: objekt));
                 }
                 context.push(kVorlageDetails);

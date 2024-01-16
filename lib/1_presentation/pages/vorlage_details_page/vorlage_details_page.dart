@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../2_application/vorlage_bloc/vorlage_bloc.dart';
 import '../../../3_domain/entities/vorlage_entity.dart';
+import '../../common_widgets/error_message.dart';
 import '../../routes/paths.dart';
 
 class VorlageDetailsPage extends StatelessWidget {
@@ -24,7 +25,7 @@ class VorlageDetailsPage extends StatelessWidget {
     }
 
     // This method can be improved....
-    VorlageEntity? checkIfVorlageExists(){
+    VorlageEntity? checkIfVorlageExists() {
       if (vorlageBloc.state is VorlageDetailsLoadedState && (vorlageBloc.state as VorlageDetailsLoadedState).vorlage != null) {
         return (vorlageBloc.state as VorlageDetailsLoadedState).vorlage;
       } else {
@@ -33,6 +34,7 @@ class VorlageDetailsPage extends StatelessWidget {
     }
 
     return MainWidget(
+      bottomNavbarIndex: 3,
       appbarTitle: getAppbarTitle(),
       showAppbar: true,
       leadingWidget: IconButton(
@@ -47,11 +49,11 @@ class VorlageDetailsPage extends StatelessWidget {
           if (state is VorlageLoadingState) {
             return const Center(child: CircularProgressIndicator());
           } else if (state is VorlageErrorState) {
-            return ErrorWidget(state.errorMessage);
+            return ErrorMessage(message: state.errorMessage);
           } else if (state is VorlageDetailsLoadedState) {
             return VorlageDetailsBody(vorlageEntity: checkIfVorlageExists());
           }
-          return const Center(child: CircularProgressIndicator());
+          return Center(child: CircularProgressIndicator(color: Colors.pink.shade400,));
         },
       ),
     );

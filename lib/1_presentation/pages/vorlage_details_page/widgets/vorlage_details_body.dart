@@ -9,9 +9,9 @@ import '../../../../2_application/vorlage_bloc/vorlage_bloc.dart';
 import '../../../routes/paths.dart';
 
 class VorlageDetailsBody extends StatefulWidget {
-  final VorlageEntity? vorlageEntity;
+  late final VorlageEntity? vorlageEntity;
 
-  const VorlageDetailsBody({super.key, this.vorlageEntity});
+  VorlageDetailsBody({super.key, this.vorlageEntity});
 
   @override
   State<VorlageDetailsBody> createState() => _VorlageDetailsBodyState();
@@ -30,20 +30,28 @@ class _VorlageDetailsBodyState extends State<VorlageDetailsBody> {
     _ortDetailController.text = widget.vorlageEntity?.ort_detail ?? '';
   }
 
+  void _createObjectForNewVorlage() {
+    String titel = _titelController.text;
+    String ort = _ortController.text;
+    String ortDetails = _ortDetailController.text;
+    UniqueID id = UniqueID();
+    VorlageEntity vorlageEntity = VorlageEntity(id: id, titel: titel, ort: ort, ort_detail: ortDetails, objekte: []);
+    BlocProvider.of<VorlageBloc>(context).add(CreateNewVorlageEvent(vorlageEntity: vorlageEntity));
+    BlocProvider.of<ObjektBloc>(context).add(InitVorlageForNewObjectEvent(vorlageEntity: vorlageEntity));
+    context.push(kObjekt);
+  }
+
   void _saveVorlage() {
     final vorlageBloc = BlocProvider.of<VorlageBloc>(context);
     String titel = _titelController.text;
     String ort = _ortController.text;
     String ortDetails = _ortDetailController.text;
-    UniqueID id;
     if (widget.vorlageEntity != null) {
-      id = widget.vorlageEntity!.id;
-      VorlageEntity vorlageEntity = VorlageEntity(id: id, titel: titel, ort: ort, ort_detail: ortDetails, objekte: widget.vorlageEntity!.objekte);
+      VorlageEntity vorlageEntity = VorlageEntity(id: widget.vorlageEntity!.id, titel: titel, ort: ort, ort_detail: ortDetails, objekte: widget.vorlageEntity!.objekte);
       vorlageBloc.add(EditVorlageEvent(vorlageEntity: vorlageEntity));
     } else if (widget.vorlageEntity == null) {
-      id = UniqueID();
-      VorlageEntity vorlageEntity = VorlageEntity(id: id, titel: titel, ort: ort, ort_detail: ortDetails, objekte: []);
-      vorlageBloc.add(NewVorlageEvent(vorlageEntity: vorlageEntity));
+      VorlageEntity vorlageEntity = VorlageEntity(id: UniqueID(), titel: titel, ort: ort, ort_detail: ortDetails, objekte: []);
+      vorlageBloc.add(CreateNewVorlageEvent(vorlageEntity: vorlageEntity));
     }
     context.push(kVorlagen);
   }
@@ -55,14 +63,16 @@ class _VorlageDetailsBodyState extends State<VorlageDetailsBody> {
   }
 
   void _addObject() {
-    final objektBloc = BlocProvider.of<ObjektBloc>(context);
-    objektBloc.add(InitVorlageForNewObjectEvent(vorlageEntity: widget.vorlageEntity!));
-    context.push(kObjekt);
+    if (widget.vorlageEntity != null) {
+      BlocProvider.of<ObjektBloc>(context).add(InitVorlageForNewObjectEvent(vorlageEntity: widget.vorlageEntity!));
+      context.push(kObjekt);
+    } else {
+      _createObjectForNewVorlage();
+    }
   }
 
   void _editObject(int index) {
-    final objektBloc = BlocProvider.of<ObjektBloc>(context);
-    objektBloc.add(LoadObjektFromVorlageEvent(vorlageEntity: widget.vorlageEntity!, objektEntity: widget.vorlageEntity!.objekte[index]));
+    BlocProvider.of<ObjektBloc>(context).add(LoadObjektFromVorlageEvent(vorlageEntity: widget.vorlageEntity!, objektEntity: widget.vorlageEntity!.objekte[index]));
     context.push(kObjekt);
   }
 
@@ -100,8 +110,8 @@ class _VorlageDetailsBodyState extends State<VorlageDetailsBody> {
           const SizedBox(height: 10),
           const Divider(),
           if (widget.vorlageEntity != null && widget.vorlageEntity!.objekte.isNotEmpty)
-            SizedBox(
-              height: 130,
+            Expanded(
+              flex: 7,
               child: ListView.builder(
                 itemCount: widget.vorlageEntity!.objekte.length,
                 itemBuilder: (context, index) {
@@ -133,7 +143,7 @@ class _VorlageDetailsBodyState extends State<VorlageDetailsBody> {
                 onPressed: () {
                   _deleteVorlage();
                 },
-                child: const Text("löschen"))
+                child: const Text("Löschen"))
         ],
       ),
     );

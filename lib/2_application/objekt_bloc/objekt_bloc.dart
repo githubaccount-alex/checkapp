@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 
@@ -32,7 +30,7 @@ class ObjektBloc extends Bloc<ObjektEvent, ObjektState> {
       }
     });
 
-    on<NewObjektForVorlageEvent>((event, emit) {
+    on<CreateNewObjektForVorlageEvent>((event, emit) {
       emit(ObjektLoadingState());
       try {
         final VorlageEntity vorlage = event.vorlageEntity;

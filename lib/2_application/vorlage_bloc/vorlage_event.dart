@@ -17,9 +17,9 @@ class EditVorlageEvent extends VorlageEvent {
   EditVorlageEvent({required this.vorlageEntity});
 }
 
-class NewVorlageEvent extends VorlageEvent {
+class CreateNewVorlageEvent extends VorlageEvent {
   final VorlageEntity vorlageEntity;
-  NewVorlageEvent({required this.vorlageEntity});
+  CreateNewVorlageEvent({required this.vorlageEntity});
 }
 
 class DeleteVorlageEvent extends VorlageEvent {

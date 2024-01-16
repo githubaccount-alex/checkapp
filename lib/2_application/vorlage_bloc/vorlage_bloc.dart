@@ -1,6 +1,4 @@
 import 'package:bloc/bloc.dart';
-import 'package:checkapp/3_domain/entities/id.dart';
-import 'package:checkapp/3_domain/entities/object_entity.dart';
 import 'package:checkapp/3_domain/entities/vorlage_entity.dart';
 import 'package:meta/meta.dart';
 
@@ -12,12 +10,12 @@ part 'vorlage_state.dart';
 
 class VorlageBloc extends Bloc<VorlageEvent, VorlageState> {
   final VorlageRepository vorlageRepository;
-
   VorlageBloc({required this.vorlageRepository}) : super(VorlageInitialState()) {
-    on<LoadVorlagenEvent>((event, emit) {
+
+    on<LoadVorlagenEvent>((event, emit) async {
       emit(VorlageLoadingState());
       try {
-        final List<VorlageEntity> vorlagen = vorlageRepository.getVorlagen();
+        final List<VorlageEntity> vorlagen = await vorlageRepository.loadVorlagen();
         emit(VorlagenLoadedState(vorlagen: vorlagen));
       } catch (e) {
         emit(VorlageErrorState(errorMessage: e.toString()));
@@ -43,31 +41,31 @@ class VorlageBloc extends Bloc<VorlageEvent, VorlageState> {
       }
     });
 
-    on<NewVorlageEvent>((event, emit) {
+    on<CreateNewVorlageEvent>((event, emit) async {
       emit(VorlageLoadingState());
       try {
-        vorlageRepository.newVorlage(event.vorlageEntity);
+        await vorlageRepository.newVorlage(event.vorlageEntity);
+        emit(VorlageDetailsLoadedState(vorlage: event.vorlageEntity));
+      } catch (e) {
+        emit(VorlageErrorState(errorMessage: e.toString()));
+      }
+    });
+
+    on<DeleteVorlageEvent>((event, emit) async {
+      emit(VorlageLoadingState());
+      try {
+        await vorlageRepository.deleteVorlage(event.vorlageEntity);
         emit(VorlageInitialState());
       } catch (e) {
         emit(VorlageErrorState(errorMessage: e.toString()));
       }
     });
 
-    on<DeleteVorlageEvent>((event, emit) {
-      emit(VorlageLoadingState());
-      try {
-        vorlageRepository.deleteVorlage(event.vorlageEntity);
-        emit(VorlageInitialState());
-      } catch (e) {
-        emit(VorlageErrorState(errorMessage: e.toString()));
-      }
-    });
-
-    on<EditVorlageEvent>((event, emit) {
+    on<EditVorlageEvent>((event, emit) async {
       emit(VorlageLoadingState());
       try {
         final VorlageEntity vorlage = event.vorlageEntity;
-        vorlageRepository.editVorlage(vorlage);
+        await vorlageRepository.editVorlage(vorlage);
         emit(VorlageInitialState());
       } catch (e) {
         emit(VorlageErrorState(errorMessage: e.toString()));

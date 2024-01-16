@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../common_widgets/error_message.dart';
+
 class VorlagenPage extends StatelessWidget {
   const VorlagenPage({super.key});
 
@@ -41,28 +43,32 @@ class VorlagenPage extends StatelessWidget {
           } else if (state is VorlageLoadingState) {
             return const Center(child: Center(child: CircularProgressIndicator()));
           } else if (state is VorlageErrorState) {
-            return ErrorWidget(state.errorMessage);
+            return ErrorMessage(message: state.errorMessage);
           } else if (state is VorlagenLoadedState) {
-            final items = state.vorlagen;
-            return ListView.builder(
-              itemCount: items.length,
-              prototypeItem: ListTile(
-                title: Text(items.first.titel),
-              ),
-              itemBuilder: (context, index) {
-                return ListTile(
-                  title: Text(items[index].titel),
-                  subtitle: Text(items[index].ort),
-                  onTap: () {
-                    bloc.add(LoadVorlageEvent(vorlageEntity: items[index]));
-                    context.push(kVorlageDetails);
-                  },
-                );
-              },
-            );
+            if (state.vorlagen.isEmpty) {
+              return const Center(child: Text("Es gibt noch keine Vorlagen"));
+            } else {
+              final items = state.vorlagen;
+              return ListView.builder(
+                itemCount: items.length,
+                prototypeItem: ListTile(
+                  title: Text(items.first.titel),
+                ),
+                itemBuilder: (context, index) {
+                  return ListTile(
+                    title: Text(items[index].titel),
+                    subtitle: Text(items[index].ort),
+                    onTap: () {
+                      bloc.add(LoadVorlageEvent(vorlageEntity: items[index]));
+                      context.push(kVorlageDetails);
+                    },
+                  );
+                },
+              );
+            }
           }
-          return const Center(child: CircularProgressIndicator(color: Colors.black));
-        },
+          return Center(child: CircularProgressIndicator(color: Colors.pink.shade400,));
+          },
       ),
     );
   }

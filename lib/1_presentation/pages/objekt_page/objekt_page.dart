@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../2_application/objekt_bloc/objekt_bloc.dart';
+import '../../common_widgets/error_message.dart';
 
 class ObjektPage extends StatelessWidget {
   const ObjektPage({super.key});
@@ -29,11 +30,11 @@ class ObjektPage extends StatelessWidget {
           if (state is ObjektLoadingState) {
             return const Center(child: CircularProgressIndicator());
           } else if (state is ObjektErrorState) {
-            return Center(child: ErrorWidget(state.errorMessage));
+            return Center(child: ErrorMessage(message: state.errorMessage));
           } else if (state is ObjektLoadedFromVorlageState) {
             return ObjektBody(vorlageEntity: state.vorlageEntity, objektEntity: state.objektEntity);
           }
-          return const Center(child: CircularProgressIndicator(color: Colors.black));
+          return Center(child: CircularProgressIndicator(color: Colors.pink.shade400,));
         },
       ),
     );

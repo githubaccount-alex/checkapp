@@ -13,7 +13,7 @@ class MainWidget extends StatelessWidget {
   final int? bottomNavbarIndex;
   final Widget? floatingActionButton;
 
-  const MainWidget({super.key, required this.showAppbar, required this.child, this.leadingWidget, this.appbarTitle, this.bottomNavbarIndex, this.floatingActionButton});
+  const MainWidget({super.key, required this.showAppbar, required this.child, this.leadingWidget, this.appbarTitle, this.bottomNavbarIndex = -1, this.floatingActionButton});
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +35,7 @@ class MainWidget extends StatelessWidget {
         body: child,
         floatingActionButton: floatingActionButton,
         bottomNavigationBar: BottomNavigationBar(
-            currentIndex: bottomNavbarIndex ?? 0,
+            currentIndex: bottomNavbarIndex == -1 ? 0 : bottomNavbarIndex!,
             onTap: (index) {
               String currentRoute = "/${ModalRoute.of(context)!.settings.name!}";
               if (index == 0 && kDashboard != currentRoute) {
@@ -50,6 +50,7 @@ class MainWidget extends StatelessWidget {
                 context.go(kEinstellungen);
               }
             },
+            selectedItemColor: bottomNavbarIndex == -1 ? Colors.grey : Colors.pink.shade400,
             unselectedItemColor: Colors.grey,
             items: const [
               BottomNavigationBarItem(
@@ -68,10 +69,10 @@ class MainWidget extends StatelessWidget {
                 icon: Icon(Icons.ad_units),
                 label: 'Vorlagen',
               ),
-              BottomNavigationBarItem(
+              /*BottomNavigationBarItem(
                 icon: Icon(Icons.settings),
                 label: 'Einstellungen',
-              ),
+              ),*/
             ]));
   }
 }

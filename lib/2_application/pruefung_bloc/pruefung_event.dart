@@ -5,18 +5,20 @@ abstract class PruefungEvent {}
 
 class LoadPruefungenEvent extends PruefungEvent {}
 
+class InitNewPruefungEvent extends PruefungEvent {}
+
+class NewPruefungEvent extends PruefungEvent {
+  final PruefungEntity pruefungEntity;
+  NewPruefungEvent({required this.pruefungEntity});
+}
+
 class DeletePruefungEvent extends PruefungEvent {
   final PruefungEntity pruefungEntity;
   DeletePruefungEvent({required this.pruefungEntity});
 }
 
-class InitNewPruefungEvent extends PruefungEvent {
+class EditPruefungEvent extends PruefungEvent {
   final PruefungEntity pruefungEntity;
-  InitNewPruefungEvent({required this.pruefungEntity});
-}
-
-class SavePruefungEvent extends PruefungEvent {
-  final PruefungEntity pruefungEntity;
-  SavePruefungEvent({required this.pruefungEntity});
+  EditPruefungEvent({required this.pruefungEntity});
 }
 

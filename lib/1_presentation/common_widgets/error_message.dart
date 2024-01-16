@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-class ErrorComponent extends StatelessWidget {
+class ErrorMessage extends StatelessWidget {
   final String message;
 
-  const ErrorComponent({Key? key, required this.message}) : super(key: key);
+  const ErrorMessage({Key? key, required this.message}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +13,7 @@ class ErrorComponent extends StatelessWidget {
         Icon(
           Icons.error,
           size: 60,
-          color: Colors.pink[700],
+          color: Colors.pink[400],
         ),
         const SizedBox(
           height: 20,
