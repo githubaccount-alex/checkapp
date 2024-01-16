@@ -1,16 +1,14 @@
 # checkapp
 
-Checkapp project
+## Checkapp project
 
-## Getting Started
+Die Check-App, gebaut mit Flutter, soll zur Überprüfung von Gegenständen in ihrem jeweiligen Ort helfen.
 
-This project is a starting point for a Flutter application.
+Das Projekt befindet sich noch in Bearbeitung. Die Hauptfunktionen sind jedoch funktionsbereit. Verbesserungen und Tests folgen.
 
-A few resources to get you started if this is your first Flutter project:
+<img src="Screenshot_20240116_180639.png"  width="200" height="400">
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+<img src="Screenshot_20240116_180406.png"  width="200" height="400">
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+<img src="Screenshot_20240116_180609.png"  width="200" height="400">
+
