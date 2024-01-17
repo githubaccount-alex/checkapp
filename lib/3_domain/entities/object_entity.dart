@@ -30,11 +30,11 @@ class ObjektEntity {
   // Create ObjektEntity from a Map
   factory ObjektEntity.fromJson(Map<String, dynamic> json) {
     return ObjektEntity(
-      id: UniqueID.fromString(json['id'] ?? ''), // Provide a default value or handle accordingly
+      id: UniqueID.fromString(json['id'] ?? ''),
       titel: json['titel'] ?? '',
       beschreibung: json['beschreibung'] ?? '',
       verantwortlicher: json['verantwortlicher'] ?? '',
-      kommentar: json['kommentar'] ?? null, // Use null if 'kommentar' is not present
+      kommentar: json['kommentar'] ?? null,
     );
   }
 }

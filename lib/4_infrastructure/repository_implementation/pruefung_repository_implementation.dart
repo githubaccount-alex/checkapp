@@ -12,15 +12,12 @@ import '../../3_domain/entities/object_entity.dart';
 class PruefungRepositoryImplementation implements PruefungRepository {
   static const String pruefungenKey = 'pruefungen';
 
-  // Initialize pruefungen list
   List<PruefungEntity> pruefungen = [];
 
-  // Constructor to load pruefungen from SharedPreferences
   PruefungRepositoryImplementation() {
     _loadPruefungen();
   }
 
-  // Helper method to load pruefungen from SharedPreferences
   Future<void> _loadPruefungen() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? pruefungenString = prefs.getString(pruefungenKey);
@@ -31,7 +28,6 @@ class PruefungRepositoryImplementation implements PruefungRepository {
     }
   }
 
-  // Helper method to save pruefungen to SharedPreferences
   Future<void> _savePruefungen() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String pruefungenString = json.encode(pruefungen.map((pruefung) => pruefung.toJson()).toList());

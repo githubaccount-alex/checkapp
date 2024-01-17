@@ -20,7 +20,7 @@ class VorlageEntity {
   // Convert VorlageEntity to a Map
   Map<String, dynamic> toJson() {
     return {
-      'id': id.toString(), // Convert UniqueID to String
+      'id': id.toString(),
       'titel': titel,
       'ort': ort,
       'ort_detail': ort_detail,
@@ -31,7 +31,7 @@ class VorlageEntity {
   // Create VorlageEntity from a Map
   factory VorlageEntity.fromJson(Map<String, dynamic> json) {
     return VorlageEntity(
-      id: UniqueID.fromString(json['id'] ?? ''), // Provide a default value or handle accordingly
+      id: UniqueID.fromString(json['id'] ?? ''),
       titel: json['titel'] ?? '',
       ort: json['ort'] ?? '',
       ort_detail: json['ort_detail'] ?? '',

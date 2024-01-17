@@ -86,7 +86,7 @@ class _DashboardPageState extends State<DashboardPage> {
                               });
                             },
                           ),
-                          Text("Light / Darkmode"),
+                          const Text("Light / Darkmode"),
                         ],
                       ),
                     ),

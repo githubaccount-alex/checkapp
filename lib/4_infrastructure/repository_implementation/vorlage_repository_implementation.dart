@@ -7,15 +7,12 @@ import 'package:checkapp/3_domain/repositories/vorlage_repository.dart';
 class VorlageRepositoryImplementation implements VorlageRepository {
   static const String vorlagenKey = 'vorlagen';
 
-  // Initialize vorlagen list
   List<VorlageEntity> vorlagen = [];
 
-  // Constructor to load vorlagen from SharedPreferences
   VorlageRepositoryImplementation() {
     _loadVorlagen();
   }
 
-  // Helper method to load vorlagen from SharedPreferences
   Future<void> _loadVorlagen() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? vorlagenString = prefs.getString(vorlagenKey);
@@ -26,7 +23,6 @@ class VorlageRepositoryImplementation implements VorlageRepository {
     }
   }
 
-  // Helper method to save vorlagen to SharedPreferences
   Future<void> _saveVorlagen() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String vorlagenString = json.encode(vorlagen.map((vorlage) => vorlage.toJson()).toList());
