@@ -28,6 +28,6 @@ Verbesserungen und Tests folgen.
 
 <img src="Screenshot_20240117_145702.png"  width="200" height="400">
 
-<img src="Screenshot_20240117_152917.png"  width="200" height="400">
+<img src="Screenshot_20240117_152917.png"  width="300" height="500">
 
-<img src="Screenshot_20240117_152946.png"  width="200" height="400">
+<img src="Screenshot_20240117_152946.png"  width="300" height="500">
