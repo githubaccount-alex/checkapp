@@ -97,8 +97,8 @@ class PruefungRepositoryImplementation implements PruefungRepository {
         }
       }
 
-      Directory? downloadsDirectory = await getDownloadsDirectory();
-      String csvFilePath = '${downloadsDirectory!.path}/pruefungen.csv';
+      final Directory appDocumentsDir = await getApplicationDocumentsDirectory();
+      String csvFilePath = '${appDocumentsDir.path}/pruefungen.csv';
 
       File csvFile = File(csvFilePath);
       String csvContent = const ListToCsvConverter().convert(csvData);
