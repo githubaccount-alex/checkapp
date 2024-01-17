@@ -2,7 +2,9 @@ import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 
 import '../../3_domain/entities/pruefung_entity.dart';
+import '../../3_domain/entities/vorlage_entity.dart';
 import '../../3_domain/repositories/pruefung_repository.dart';
+import '../../3_domain/repositories/vorlage_repository.dart';
 
 part 'pruefung_event.dart';
 
@@ -10,56 +12,76 @@ part 'pruefung_state.dart';
 
 class PruefungBloc extends Bloc<PruefungEvent, PruefungState> {
   final PruefungRepository pruefungRepository;
+  final VorlageRepository vorlageRepository;
 
-  PruefungBloc({required this.pruefungRepository}) : super(PruefungInitialState()) {
+  PruefungBloc({required this.pruefungRepository, required this.vorlageRepository}) : super(PruefungInitialState()) {
+    // Prüfungen
+
     on<LoadPruefungenEvent>((event, emit) async {
-      emit(PruefungLoadingState());
+      emit(PruefungenLoadingState());
       try {
         final List<PruefungEntity> pruefungen = await pruefungRepository.getPruefungen();
-        emit(PruefungenLoadedState(pruefungen: pruefungen));
+        final List<VorlageEntity> vorlagen = await vorlageRepository.getVorlagen();
+
+        emit(PruefungenLoadedState(pruefungen: pruefungen, vorlagen: vorlagen));
       } catch (e) {
-        emit(PruefungErrorState(errorMessage: e.toString()));
+        emit(PruefungenErrorState(errorMessage: e.toString()));
       }
     });
 
-    on<InitNewPruefungEvent>((event, emit) {
-      emit(PruefungLoadingState());
-      try {
-        emit(PruefungDetailsLoadedState());
-      } catch (e) {
-        emit(PruefungErrorState(errorMessage: e.toString()));
-      }
+    // Prüfung Details
+
+    on<NoVorlagenForPruefungEvent>((event, emit) async {
+      emit(VorlagenForPruefungEmptyState());
     });
 
-    on<NewPruefungEvent>((event, emit) async {
-      emit(PruefungLoadingState());
+    on<LoadPruefungDetailsEvent>((event, emit) async {
+      emit(PruefungDetailsLoadedState(pruefungEntity: event.pruefungEntity));
+    });
+
+    on<CreateNewPruefungDetailsEvent>((event, emit) async {
+      emit(PruefungDetailsLoadingState());
       try {
         await pruefungRepository.newPruefung(event.pruefungEntity);
         emit(PruefungDetailsLoadedState(pruefungEntity: event.pruefungEntity));
       } catch (e) {
-        emit(PruefungErrorState(errorMessage: e.toString()));
+        emit(PruefungDetailsErrorState(errorMessage: e.toString()));
       }
     });
 
-    on<DeletePruefungEvent>((event, emit) async {
-      emit(PruefungLoadingState());
+    on<EditPruefungDetailsEvent>((event, emit) async {
+      emit(PruefungDetailsLoadingState());
       try {
-        final PruefungEntity pruefungEntity = event.pruefungEntity;
-        await pruefungRepository.deletePruefung(pruefungEntity);
-        emit(PruefungInitialState());
+        final List<PruefungEntity> pruefungen = await pruefungRepository.editPruefung(event.pruefungEntity);
+        final List<VorlageEntity> vorlagen = await vorlageRepository.getVorlagen();
+        emit(PruefungenLoadedState(pruefungen: pruefungen, vorlagen: vorlagen));
       } catch (e) {
-        emit(PruefungErrorState(errorMessage: e.toString()));
+        emit(PruefungDetailsErrorState(errorMessage: e.toString()));
       }
     });
 
-    on<EditPruefungEvent>((event, emit) async {
-      emit(PruefungLoadingState());
+    on<DeletePruefungDetailsEvent>((event, emit) async {
+      emit(PruefungDetailsLoadingState());
       try {
-        final PruefungEntity pruefungEntity = event.pruefungEntity;
-        await pruefungRepository.editPruefung(pruefungEntity);
-        emit(PruefungDetailsLoadedState(pruefungEntity: pruefungEntity));
+        final List<PruefungEntity> pruefungen = await pruefungRepository.deletePruefung(event.pruefungEntity);
+        final List<VorlageEntity> vorlagen = await vorlageRepository.getVorlagen();
+        emit(PruefungenLoadedState(pruefungen: pruefungen, vorlagen: vorlagen));
       } catch (e) {
-        emit(PruefungErrorState(errorMessage: e.toString()));
+        emit(PruefungDetailsErrorState(errorMessage: e.toString()));
+      }
+    });
+
+    // Export to CSV
+
+    on<ExportPruefungenToCsv>((event, emit) async {
+      emit(PruefungenLoadingState());
+      try {
+        final List<PruefungEntity> pruefungen = await pruefungRepository.getPruefungen();
+        final List<VorlageEntity> vorlagen = await vorlageRepository.getVorlagen();
+        await pruefungRepository.exportToCSV(pruefungen);
+        emit(PruefungenLoadedState(pruefungen: pruefungen, vorlagen: vorlagen));
+      } catch (e) {
+        emit(PruefungDetailsErrorState(errorMessage: e.toString()));
       }
     });
   }

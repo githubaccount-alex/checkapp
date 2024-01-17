@@ -1,10 +1,3 @@
 const String kDashboard = "/dashboard";
 const String kVorlagen = "/vorlagen";
-const String kNeuePruefung = "/neue_pruefung";
 const String kPruefungen = "/pruefungen";
-const String kEinstellungen = "/einstellungen";
-const String kKommentare = "/kommentare";
-const String kPruefer = "/pruefer";
-const String kVorlageDetails = "/vorlage_details";
-const String kObjekt = "/objekt";
-const String kNeuePruefungDetails = "/neue_pruefung_details";

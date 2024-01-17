@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:checkapp/3_domain/entities/id.dart';
 
 import 'object_entity.dart';

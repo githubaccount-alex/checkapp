@@ -52,28 +52,7 @@ class _DashboardPageState extends State<DashboardPage> {
                 Card(
                   child: InkWell(
                     onTap: () {
-                      context.go(kNeuePruefung);
-                    },
-                    child: const SizedBox(
-                      width: 300,
-                      height: 100,
-                      child: Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(Icons.add),
-                            SizedBox(height: 8),
-                            Text("Neue Prüfung"),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                Card(
-                  child: InkWell(
-                    onTap: () {
-                      context.go(kPruefungen);
+                      context.go(kVorlagen);
                     },
                     child: const SizedBox(
                       width: 300,

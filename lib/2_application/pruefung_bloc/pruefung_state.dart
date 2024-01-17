@@ -5,19 +5,33 @@ abstract class PruefungState {}
 
 class PruefungInitialState extends PruefungState {}
 
-class PruefungLoadingState extends PruefungState {}
+// Prüfungen
+
+class PruefungenLoadingState extends PruefungState {}
+
+class PruefungenErrorState extends PruefungState {
+  final String errorMessage;
+  PruefungenErrorState({required this.errorMessage});
+}
 
 class PruefungenLoadedState extends PruefungState {
   final List<PruefungEntity> pruefungen;
-  PruefungenLoadedState({required this.pruefungen});
+  final List<VorlageEntity> vorlagen;
+  PruefungenLoadedState({required this.pruefungen, required this.vorlagen});
+}
+
+// Prüfungen Details
+
+class PruefungDetailsLoadingState extends PruefungState {}
+
+class VorlagenForPruefungEmptyState extends PruefungState {}
+
+class PruefungDetailsErrorState extends PruefungState {
+  final String errorMessage;
+  PruefungDetailsErrorState({required this.errorMessage});
 }
 
 class PruefungDetailsLoadedState extends PruefungState {
-  final PruefungEntity? pruefungEntity;
-  PruefungDetailsLoadedState({this.pruefungEntity});
-}
-
-class PruefungErrorState extends PruefungState {
-  final String errorMessage;
-  PruefungErrorState({required this.errorMessage});
+  final PruefungEntity pruefungEntity;
+  PruefungDetailsLoadedState({required this.pruefungEntity});
 }

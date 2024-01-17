@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 class CheckTheme {
   static final ThemeData materialLightTheme = ThemeData.light().copyWith(
+      floatingActionButtonTheme: FloatingActionButtonThemeData(backgroundColor: Colors.pink[400]),
     primaryColor: Colors.pink[400],
       scaffoldBackgroundColor: Colors.white,
       textTheme: const TextTheme(
@@ -21,6 +22,7 @@ class CheckTheme {
 
   // Material Dark Theme
   static final ThemeData materialDarkTheme = ThemeData.dark().copyWith(
+      floatingActionButtonTheme: FloatingActionButtonThemeData(backgroundColor: Colors.pink[700]),
       primaryColor: Colors.pink[700],
       scaffoldBackgroundColor: Colors.blueGrey[900],
       textTheme: const TextTheme(

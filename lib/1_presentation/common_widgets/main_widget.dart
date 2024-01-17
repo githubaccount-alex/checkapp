@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:provider/provider.dart';
-
-import '../../0_common/theme/theme_provider.dart';
 import '../routes/paths.dart';
 
 class MainWidget extends StatelessWidget {
@@ -34,6 +31,7 @@ class MainWidget extends StatelessWidget {
             : null,
         body: child,
         floatingActionButton: floatingActionButton,
+        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
         bottomNavigationBar: BottomNavigationBar(
             currentIndex: bottomNavbarIndex == -1 ? 0 : bottomNavbarIndex!,
             onTap: (index) {
@@ -42,12 +40,8 @@ class MainWidget extends StatelessWidget {
                 context.go(kDashboard);
               } else if (index == 1 && kPruefungen != currentRoute) {
                 context.go(kPruefungen);
-              } else if (index == 2 && kNeuePruefung != currentRoute) {
-                context.go(kNeuePruefung);
-              } else if (index == 3 && kVorlagen != currentRoute) {
+              } else if (index == 2 && kVorlagen != currentRoute) {
                 context.go(kVorlagen);
-              } else if (index == 4 && kEinstellungen != currentRoute) {
-                context.go(kEinstellungen);
               }
             },
             selectedItemColor: bottomNavbarIndex == -1 ? Colors.grey : Colors.pink.shade400,
@@ -62,17 +56,9 @@ class MainWidget extends StatelessWidget {
                 label: 'Prüfungen',
               ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.add),
-                label: 'Neue Prüfung',
-              ),
-              BottomNavigationBarItem(
                 icon: Icon(Icons.ad_units),
                 label: 'Vorlagen',
               ),
-              /*BottomNavigationBarItem(
-                icon: Icon(Icons.settings),
-                label: 'Einstellungen',
-              ),*/
             ]));
   }
 }

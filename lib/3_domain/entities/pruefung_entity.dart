@@ -3,20 +3,20 @@ import 'package:checkapp/3_domain/entities/vorlage_entity.dart';
 
 class PruefungEntity {
   UniqueID id;
-  String pruefer;
+  String? pruefer;
   DateTime datum;
   VorlageEntity vorlage;
 
   PruefungEntity({
     required this.id,
-    required this.pruefer,
+    this.pruefer,
     required this.datum,
     required this.vorlage,
   });
 
   Map<String, dynamic> toJson() {
     return {
-      'id': id.toString(),
+      'id': id.value,
       'pruefer': pruefer,
       'datum': datum.toIso8601String(),
       'vorlage': vorlage.toJson(),

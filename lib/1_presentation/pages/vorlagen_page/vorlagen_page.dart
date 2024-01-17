@@ -1,10 +1,12 @@
-import 'package:checkapp/1_presentation/common_widgets/main_widget.dart';
-import 'package:checkapp/1_presentation/routes/paths.dart';
+import 'package:checkapp/1_presentation/pages/vorlagen_page/widgets/objekt_body.dart';
+import 'package:checkapp/1_presentation/pages/vorlagen_page/widgets/vorlage_details_body.dart';
+import 'package:checkapp/1_presentation/pages/vorlagen_page/widgets/vorlagen_body.dart';
 import 'package:checkapp/2_application/vorlage_bloc/vorlage_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 
+import '../../../0_common/util/snackbar.dart';
+import '../../../2_application/snackbar_bloc/snackbar_bloc.dart';
 import '../../common_widgets/error_message.dart';
 
 class VorlagenPage extends StatelessWidget {
@@ -13,62 +15,33 @@ class VorlagenPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bloc = BlocProvider.of<VorlageBloc>(context)..add(LoadVorlagenEvent());
-
-    final theme = Theme.of(context);
-
-    return MainWidget(
-      showAppbar: true,
-      bottomNavbarIndex: 3,
-      appbarTitle: "Vorlagen",
-      leadingWidget: IconButton(
-        icon: const Icon(Icons.arrow_back),
-        onPressed: () {
-          context.push(kDashboard);
-        },
-      ),
-      floatingActionButton: FloatingActionButton(
-        heroTag: "btn1",
-        backgroundColor: theme.primaryColor,
-        onPressed: () {
-          bloc.add(InitNewVorlageEvent());
-          context.push(kVorlageDetails);
-        },
-        child: const Icon(Icons.add, color: Colors.white),
-      ),
+    return BlocListener<SnackbarBloc, SnackbarState>(
+      listener: (context, state) {
+        if (state is ShowSnackbarState) {
+          final snackbar = SnackbarUtil();
+          snackbar.showSnackBar(context, state.message);
+        }
+      },
       child: BlocBuilder<VorlageBloc, VorlageState>(
         bloc: bloc,
         builder: (context, state) {
-          if (state is VorlageInitialState) {
-            bloc.add(LoadVorlagenEvent());
-          } else if (state is VorlageLoadingState) {
-            return const Center(child: Center(child: CircularProgressIndicator()));
-          } else if (state is VorlageErrorState) {
+          if (state is VorlagenLoadingState || state is VorlageDetailsLoadingState || state is ObjektFromVorlageLoadingState) {
+            return Center(child: Center(child: CircularProgressIndicator(color: Colors.pink.shade400)));
+          } else if (state is VorlagenErrorState) {
+            return ErrorMessage(message: state.errorMessage);
+          } else if (state is VorlageDetailsErrorState) {
+            return ErrorMessage(message: state.errorMessage);
+          } else if (state is ObjektFromVorlageErrorState) {
             return ErrorMessage(message: state.errorMessage);
           } else if (state is VorlagenLoadedState) {
-            if (state.vorlagen.isEmpty) {
-              return const Center(child: Text("Es gibt noch keine Vorlagen"));
-            } else {
-              final items = state.vorlagen;
-              return ListView.builder(
-                itemCount: items.length,
-                prototypeItem: ListTile(
-                  title: Text(items.first.titel),
-                ),
-                itemBuilder: (context, index) {
-                  return ListTile(
-                    title: Text(items[index].titel),
-                    subtitle: Text(items[index].ort),
-                    onTap: () {
-                      bloc.add(LoadVorlageEvent(vorlageEntity: items[index]));
-                      context.push(kVorlageDetails);
-                    },
-                  );
-                },
-              );
-            }
+            return VorlagenBody(vorlagen: state.vorlagen);
+          } else if (state is VorlageDetailsLoadedState) {
+            return VorlageDetailsBody(vorlageEntity: state.vorlageEntity);
+          } else if (state is ObjektFromVorlageLoadedState) {
+            return ObjektBody(vorlageEntity: state.vorlageEntity, objektEntity: state.objektEntity);
           }
-          return Center(child: CircularProgressIndicator(color: Colors.pink.shade400,));
-          },
+          return const Center(child: CircularProgressIndicator());
+        },
       ),
     );
   }

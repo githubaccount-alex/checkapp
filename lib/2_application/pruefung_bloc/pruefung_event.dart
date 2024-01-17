@@ -5,20 +5,26 @@ abstract class PruefungEvent {}
 
 class LoadPruefungenEvent extends PruefungEvent {}
 
-class InitNewPruefungEvent extends PruefungEvent {}
-
-class NewPruefungEvent extends PruefungEvent {
+class LoadPruefungDetailsEvent extends PruefungEvent {
   final PruefungEntity pruefungEntity;
-  NewPruefungEvent({required this.pruefungEntity});
+  LoadPruefungDetailsEvent({required this.pruefungEntity});
 }
 
-class DeletePruefungEvent extends PruefungEvent {
+class CreateNewPruefungDetailsEvent extends PruefungEvent {
   final PruefungEntity pruefungEntity;
-  DeletePruefungEvent({required this.pruefungEntity});
+  CreateNewPruefungDetailsEvent({required this.pruefungEntity});
 }
 
-class EditPruefungEvent extends PruefungEvent {
+class EditPruefungDetailsEvent extends PruefungEvent {
   final PruefungEntity pruefungEntity;
-  EditPruefungEvent({required this.pruefungEntity});
+  EditPruefungDetailsEvent({required this.pruefungEntity});
 }
 
+class DeletePruefungDetailsEvent extends PruefungEvent {
+  final PruefungEntity pruefungEntity;
+  DeletePruefungDetailsEvent({required this.pruefungEntity});
+}
+
+class NoVorlagenForPruefungEvent extends PruefungEvent {}
+
+class ExportPruefungenToCsv extends PruefungEvent {}

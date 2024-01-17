@@ -1,7 +1,13 @@
 import 'dart:convert';
+import 'dart:developer';
+import 'dart:io';
+import 'package:csv/csv.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:checkapp/3_domain/entities/pruefung_entity.dart';
 import 'package:checkapp/3_domain/repositories/pruefung_repository.dart';
+
+import '../../3_domain/entities/object_entity.dart';
 
 class PruefungRepositoryImplementation implements PruefungRepository {
   static const String pruefungenKey = 'pruefungen';
@@ -44,13 +50,14 @@ class PruefungRepositoryImplementation implements PruefungRepository {
   }
 
   @override
-  Future<void> deletePruefung(PruefungEntity pruefung) async {
+  Future<List<PruefungEntity>> deletePruefung(PruefungEntity pruefung) async {
     pruefungen.remove(pruefung);
     await _savePruefungen();
+    return pruefungen;
   }
 
   @override
-  Future<void> editPruefung(PruefungEntity pruefung) async {
+  Future<List<PruefungEntity>> editPruefung(PruefungEntity pruefung) async {
     for (int i = 0; i < pruefungen.length; i++) {
       if (pruefungen[i].id == pruefung.id) {
         pruefungen[i] = pruefung;
@@ -58,5 +65,49 @@ class PruefungRepositoryImplementation implements PruefungRepository {
       }
     }
     await _savePruefungen();
+    return pruefungen;
+  }
+
+  @override
+  Future<void> exportToCSV(List<PruefungEntity> pruefungen) async {
+    try {
+      List<List<dynamic>> csvData = [];
+
+      csvData.add(['Pruefung ID', 'Pruefer', 'Datum', 'Vorlage Titel', 'Vorlage Ort', 'Vorlage Ort Detail', 'Objekt Titel', 'Objekt Beschreibung', 'Objekt Verantwortlicher', 'Objekt Kommentar']);
+
+      int pruefungID = 0;
+
+      for (PruefungEntity pruefung in pruefungen) {
+        for (ObjektEntity objekt in pruefung.vorlage.objekte) {
+          log(pruefung.id.value.toString());
+          csvData.add([
+            pruefungID.toString(),
+            pruefung.pruefer ?? '',
+            pruefung.datum.toIso8601String(),
+            pruefung.vorlage.titel,
+            pruefung.vorlage.ort,
+            pruefung.vorlage.ort_detail,
+            objekt.titel,
+            objekt.beschreibung,
+            objekt.verantwortlicher,
+            objekt.kommentar,
+          ]);
+
+          pruefungID++;
+        }
+      }
+
+      Directory? downloadsDirectory = await getDownloadsDirectory();
+      String csvFilePath = '${downloadsDirectory!.path}/pruefungen.csv';
+
+      File csvFile = File(csvFilePath);
+      String csvContent = const ListToCsvConverter().convert(csvData);
+      await csvFile.writeAsString(csvContent);
+      log(csvContent);
+      log(csvFilePath);
+      log("Exported to CSV");
+    } catch (e) {
+      log('Error exporting CSV: $e');
+    }
   }
 }
