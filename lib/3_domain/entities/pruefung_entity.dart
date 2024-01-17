@@ -26,9 +26,9 @@ class PruefungEntity {
 
   factory PruefungEntity.fromJson(Map<String, dynamic> json) {
     return PruefungEntity(
-      id: UniqueID.fromString(json['id'] ?? ''), // Provide a default value or handle accordingly
+      id: UniqueID.fromString(json['id'] ?? ''),
       pruefer: json['pruefer'] ?? '',
-      datum: DateTime.tryParse(json['datum'] ?? '') ?? DateTime.now(), // Provide a default or handle accordingly
+      datum: DateTime.tryParse(json['datum'] ?? '') ?? DateTime.now(),
       vorlage: VorlageEntity.fromJson(json['vorlage'] ?? {}),
     );
   }

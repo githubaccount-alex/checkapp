@@ -19,7 +19,7 @@ class ObjektEntity {
   // Convert ObjektEntity to a Map
   Map<String, dynamic> toJson() {
     return {
-      'id': id.toString(), // Convert UniqueID to String
+      'id': id.toString(),
       'titel': titel,
       'beschreibung': beschreibung,
       'verantwortlicher': verantwortlicher,
