@@ -39,6 +39,11 @@ class VorlagenBody extends StatelessWidget {
       }
     }
 
+    void createNewVorlage() {
+      VorlageEntity emptyVorlage = VorlageEntity(id: UniqueID(), titel: "", ort: "", ort_detail: "", objekte: []);
+      bloc.add(CreateNewVorlageDetailsEvent(vorlageEntity: emptyVorlage));
+    }
+
     return MainWidget(
       showAppbar: true,
       bottomNavbarIndex: 2,
@@ -52,8 +57,7 @@ class VorlagenBody extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         heroTag: "btn1",
         onPressed: () {
-          VorlageEntity emptyVorlage = VorlageEntity(id: UniqueID(), titel: "", ort: "", ort_detail: "", objekte: []);
-          bloc.add(CreateNewVorlageDetailsEvent(vorlageEntity: emptyVorlage));
+          createNewVorlage();
         },
         child: const Icon(Icons.add, color: Colors.white),
       ),

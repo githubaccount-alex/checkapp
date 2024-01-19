@@ -31,35 +31,33 @@ class _VorlageDetailsBodyState extends State<VorlageDetailsBody> {
     _ortDetailController.text = widget.vorlageEntity.ort_detail ?? '';
   }
 
-  _addObject() {
-    final vorlageBloc = BlocProvider.of<VorlageBloc>(context);
-    final ObjektEntity emptyObject = ObjektEntity(id: UniqueID(), titel: "", beschreibung: "", verantwortlicher: "", kommentar: "IO");
-    vorlageBloc.add(CreateNewObjektForVorlageEvent(vorlageEntity: widget.vorlageEntity, objektEntity: emptyObject));
-  }
-
-  _editObject(index) {
-    final vorlageBloc = BlocProvider.of<VorlageBloc>(context);
-    final ObjektEntity objektEntity = widget.vorlageEntity.objekte[index];
-    vorlageBloc.add(LoadObjektFromVorlageEvent(vorlageEntity: widget.vorlageEntity, objektEntity: objektEntity));
-  }
-
-  _saveVorlage() {
-    final vorlageBloc = BlocProvider.of<VorlageBloc>(context);
-    final VorlageEntity vorlageEntity = VorlageEntity(id: widget.vorlageEntity.id, titel: _titelController.text, ort: _ortController.text, ort_detail: _ortDetailController.text, objekte: widget.vorlageEntity.objekte);
-    vorlageBloc.add(EditVorlageDetailsEvent(vorlageEntity: vorlageEntity));
-  }
-
-  _deleteVorlage() {
-    final vorlageBloc = BlocProvider.of<VorlageBloc>(context);
-    vorlageBloc.add(DeleteVorlageDetailsEvent(vorlageEntity: widget.vorlageEntity));
-  }
-
   @override
   Widget build(BuildContext context) {
+    final vorlageBloc = BlocProvider.of<VorlageBloc>(context);
+
+    addObject() {
+      final ObjektEntity emptyObject = ObjektEntity(id: UniqueID(), titel: "", beschreibung: "", verantwortlicher: "", kommentar: "IO");
+      vorlageBloc.add(CreateNewObjektForVorlageEvent(vorlageEntity: widget.vorlageEntity, objektEntity: emptyObject));
+    }
+
+    editObject(index) {
+      final ObjektEntity objektEntity = widget.vorlageEntity.objekte[index];
+      vorlageBloc.add(LoadObjektFromVorlageEvent(vorlageEntity: widget.vorlageEntity, objektEntity: objektEntity));
+    }
+
+    saveVorlage() {
+      final VorlageEntity vorlageEntity = VorlageEntity(id: widget.vorlageEntity.id, titel: _titelController.text, ort: _ortController.text, ort_detail: _ortDetailController.text, objekte: widget.vorlageEntity.objekte);
+      vorlageBloc.add(EditVorlageDetailsEvent(vorlageEntity: vorlageEntity));
+    }
+
+    deleteVorlage() {
+      vorlageBloc.add(DeleteVorlageDetailsEvent(vorlageEntity: widget.vorlageEntity));
+    }
+
     return PopScope(
       onPopInvoked: (bool didPop) {
-        _saveVorlage();
-        },
+        saveVorlage();
+      },
       child: MainWidget(
         showAppbar: true,
         bottomNavbarIndex: 2,
@@ -73,7 +71,7 @@ class _VorlageDetailsBodyState extends State<VorlageDetailsBody> {
         floatingActionButton: FloatingActionButton.extended(
             heroTag: "btn1",
             onPressed: () {
-              _addObject();
+              addObject();
             },
             icon: const Icon(Icons.add, color: Colors.white),
             label: const Text("Objekt hinzufügen")),
@@ -107,13 +105,13 @@ class _VorlageDetailsBodyState extends State<VorlageDetailsBody> {
                 children: [
                   ElevatedButton(
                       onPressed: () {
-                        _saveVorlage();
+                        saveVorlage();
                       },
                       child: const Text("Speichern")),
                   const SizedBox(width: 10),
                   ElevatedButton(
                       onPressed: () {
-                        _deleteVorlage();
+                        deleteVorlage();
                       },
                       child: const Text("Löschen"))
                 ],
@@ -128,7 +126,7 @@ class _VorlageDetailsBodyState extends State<VorlageDetailsBody> {
                         title: Text(widget.vorlageEntity.objekte[index].titel),
                         subtitle: Text(widget.vorlageEntity.objekte[index].verantwortlicher),
                         onTap: () {
-                          _editObject(index);
+                          editObject(index);
                         },
                       );
                     },
