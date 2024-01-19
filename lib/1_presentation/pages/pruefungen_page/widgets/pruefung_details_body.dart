@@ -15,62 +15,67 @@ class PruefungDetailsBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MainWidget(
-      showAppbar: true,
-      bottomNavbarIndex: 1,
-      appbarTitle: "${pruefungEntity.vorlage.titel} : ${DateFormat('dd.MM.yyyy HH:mm').format(pruefungEntity.datum)}",
-      leadingWidget: IconButton(
-        icon: const Icon(Icons.arrow_back),
-        onPressed: () {
-          context.push(kDashboard);
-        },
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          children: [
-            TextFormField(
-              initialValue: pruefungEntity.pruefer ?? "Prüfer",
-              decoration: InputDecoration(hintText: pruefungEntity.pruefer ?? "Prüfer"),
-              onChanged: (value) {
-                pruefungEntity.pruefer = value;
-              },
-            ),
-            const SizedBox(height: 10),
-            Text(
-              DateFormat('dd.MM.yyyy HH:mm').format(pruefungEntity.datum),
-              style: const TextStyle(fontSize: 20),
-            ),
-            const Divider(),
-            ElevatedButton(
-                onPressed: () {
-                  BlocProvider.of<PruefungBloc>(context).add(EditPruefungDetailsEvent(pruefungEntity: pruefungEntity));
+    return PopScope(
+      onPopInvoked: (bool didPop) {
+        BlocProvider.of<PruefungBloc>(context).add(EditPruefungDetailsEvent(pruefungEntity: pruefungEntity));
+      },
+      child: MainWidget(
+        showAppbar: true,
+        bottomNavbarIndex: 1,
+        appbarTitle: "${pruefungEntity.vorlage.titel} : ${DateFormat('dd.MM.yyyy HH:mm').format(pruefungEntity.datum)}",
+        leadingWidget: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            context.push(kDashboard);
+          },
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            children: [
+              TextFormField(
+                initialValue: pruefungEntity.pruefer ?? "Prüfer",
+                decoration: InputDecoration(hintText: pruefungEntity.pruefer ?? "Prüfer"),
+                onChanged: (value) {
+                  pruefungEntity.pruefer = value;
                 },
-                child: const Text("Speichern")),
-            const Divider(),
-            ElevatedButton(
-                onPressed: () {
-                  BlocProvider.of<PruefungBloc>(context).add(DeletePruefungDetailsEvent(pruefungEntity: pruefungEntity));
-                },
-                child: const Text("Löschen")),
-            const Divider(),
-            Expanded(
-              child: ListView.builder(
-                  itemCount: pruefungEntity.vorlage.objekte.length,
-                  itemBuilder: (context, index) {
-                    return ListTile(
-                      title: Text(pruefungEntity.vorlage.objekte[index].titel),
-                      subtitle: TextFormField(
-                        initialValue: pruefungEntity.vorlage.objekte[index].kommentar ?? "IO",
-                        decoration: InputDecoration(hintText: pruefungEntity.vorlage.objekte[index].kommentar ?? "IO"),
-                        onChanged: (value) {
-                          pruefungEntity.vorlage.objekte[index].kommentar = value;
-                        },
-                      ),
-                    );
-                  }),
-            ),
-          ],
+              ),
+              const SizedBox(height: 10),
+              Text(
+                DateFormat('dd.MM.yyyy HH:mm').format(pruefungEntity.datum),
+                style: const TextStyle(fontSize: 20),
+              ),
+              const Divider(),
+              ElevatedButton(
+                  onPressed: () {
+                    BlocProvider.of<PruefungBloc>(context).add(EditPruefungDetailsEvent(pruefungEntity: pruefungEntity));
+                  },
+                  child: const Text("Speichern")),
+              const Divider(),
+              ElevatedButton(
+                  onPressed: () {
+                    BlocProvider.of<PruefungBloc>(context).add(DeletePruefungDetailsEvent(pruefungEntity: pruefungEntity));
+                  },
+                  child: const Text("Löschen")),
+              const Divider(),
+              Expanded(
+                child: ListView.builder(
+                    itemCount: pruefungEntity.vorlage.objekte.length,
+                    itemBuilder: (context, index) {
+                      return ListTile(
+                        title: Text(pruefungEntity.vorlage.objekte[index].titel),
+                        subtitle: TextFormField(
+                          initialValue: pruefungEntity.vorlage.objekte[index].kommentar ?? "IO",
+                          decoration: InputDecoration(hintText: pruefungEntity.vorlage.objekte[index].kommentar ?? "IO"),
+                          onChanged: (value) {
+                            pruefungEntity.vorlage.objekte[index].kommentar = value;
+                          },
+                        ),
+                      );
+                    }),
+              ),
+            ],
+          ),
         ),
       ),
     );

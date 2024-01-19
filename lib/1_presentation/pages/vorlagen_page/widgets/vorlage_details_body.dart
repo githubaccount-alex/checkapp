@@ -56,81 +56,86 @@ class _VorlageDetailsBodyState extends State<VorlageDetailsBody> {
 
   @override
   Widget build(BuildContext context) {
-    return MainWidget(
-      showAppbar: true,
-      bottomNavbarIndex: 2,
-      appbarTitle: "Vorlage: ${widget.vorlageEntity.titel}",
-      leadingWidget: IconButton(
-        icon: const Icon(Icons.arrow_back),
-        onPressed: () {
-          context.push(kDashboard);
+    return PopScope(
+      onPopInvoked: (bool didPop) {
+        _saveVorlage();
         },
-      ),
-      floatingActionButton: FloatingActionButton.extended(
-          heroTag: "btn1",
+      child: MainWidget(
+        showAppbar: true,
+        bottomNavbarIndex: 2,
+        appbarTitle: "Vorlage: ${widget.vorlageEntity.titel}",
+        leadingWidget: IconButton(
+          icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            _addObject();
+            context.push(kDashboard);
           },
-          icon: const Icon(Icons.add, color: Colors.white),
-          label: const Text("Objekt hinzufügen")),
-      child: Padding(
-        padding: const EdgeInsets.all(15.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            TextField(
-              controller: _titelController,
-              decoration: const InputDecoration(
-                labelText: 'Titel',
-              ),
-            ),
-            TextField(
-              controller: _ortController,
-              decoration: const InputDecoration(
-                labelText: 'Ort',
-              ),
-            ),
-            TextField(
-              controller: _ortDetailController,
-              decoration: const InputDecoration(
-                labelText: 'Ort Details',
-              ),
-            ),
-            const SizedBox(height: 10),
-            const Divider(),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ElevatedButton(
-                    onPressed: () {
-                      _saveVorlage();
-                    },
-                    child: const Text("Speichern")),
-                const SizedBox(width: 10),
-                ElevatedButton(
-                    onPressed: () {
-                      _deleteVorlage();
-                    },
-                    child: const Text("Löschen"))
-              ],
-            ),
-            const Divider(),
-            if (widget.vorlageEntity.objekte.isNotEmpty)
-              Expanded(
-                child: ListView.builder(
-                  itemCount: widget.vorlageEntity.objekte.length,
-                  itemBuilder: (context, index) {
-                    return ListTile(
-                      title: Text(widget.vorlageEntity.objekte[index].titel),
-                      subtitle: Text(widget.vorlageEntity.objekte[index].verantwortlicher),
-                      onTap: () {
-                        _editObject(index);
-                      },
-                    );
-                  },
+        ),
+        floatingActionButton: FloatingActionButton.extended(
+            heroTag: "btn1",
+            onPressed: () {
+              _addObject();
+            },
+            icon: const Icon(Icons.add, color: Colors.white),
+            label: const Text("Objekt hinzufügen")),
+        child: Padding(
+          padding: const EdgeInsets.all(15.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              TextField(
+                controller: _titelController,
+                decoration: const InputDecoration(
+                  labelText: 'Titel',
                 ),
               ),
-          ],
+              TextField(
+                controller: _ortController,
+                decoration: const InputDecoration(
+                  labelText: 'Ort',
+                ),
+              ),
+              TextField(
+                controller: _ortDetailController,
+                decoration: const InputDecoration(
+                  labelText: 'Ort Details',
+                ),
+              ),
+              const SizedBox(height: 10),
+              const Divider(),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ElevatedButton(
+                      onPressed: () {
+                        _saveVorlage();
+                      },
+                      child: const Text("Speichern")),
+                  const SizedBox(width: 10),
+                  ElevatedButton(
+                      onPressed: () {
+                        _deleteVorlage();
+                      },
+                      child: const Text("Löschen"))
+                ],
+              ),
+              const Divider(),
+              if (widget.vorlageEntity.objekte.isNotEmpty)
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: widget.vorlageEntity.objekte.length,
+                    itemBuilder: (context, index) {
+                      return ListTile(
+                        title: Text(widget.vorlageEntity.objekte[index].titel),
+                        subtitle: Text(widget.vorlageEntity.objekte[index].verantwortlicher),
+                        onTap: () {
+                          _editObject(index);
+                        },
+                      );
+                    },
+                  ),
+                ),
+            ],
+          ),
         ),
       ),
     );
