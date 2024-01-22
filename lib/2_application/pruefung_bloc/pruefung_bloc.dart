@@ -1,4 +1,7 @@
+import 'dart:typed_data';
+
 import 'package:bloc/bloc.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:meta/meta.dart';
 
 import '../../3_domain/entities/pruefung_entity.dart';
@@ -66,6 +69,57 @@ class PruefungBloc extends Bloc<PruefungEvent, PruefungState> {
         final List<PruefungEntity> pruefungen = await pruefungRepository.deletePruefung(event.pruefungEntity);
         final List<VorlageEntity> vorlagen = await vorlageRepository.getVorlagen();
         emit(PruefungenLoadedState(pruefungen: pruefungen, vorlagen: vorlagen));
+      } catch (e) {
+        emit(PruefungDetailsErrorState(errorMessage: e.toString()));
+      }
+    });
+
+    on<AddImageFromCameraToPruefungDetailsEvent>((event, emit) async {
+      emit(PruefungDetailsLoadingState());
+      try {
+        final ImagePicker picker = ImagePicker();
+        final pickedFile = await picker.pickImage(source: ImageSource.camera);
+        if (pickedFile != null) {
+          final imageBytes = await pickedFile.readAsBytes();
+          final PruefungEntity editedPruefung = event.pruefungEntity;
+          editedPruefung.imageData.add(imageBytes);
+          await pruefungRepository.editPruefung(editedPruefung);
+          emit(PruefungDetailsLoadedState(pruefungEntity: editedPruefung));
+        } else {
+          emit(PruefungDetailsLoadedState(pruefungEntity: event.pruefungEntity));
+        }
+      } catch (e) {
+        emit(PruefungDetailsErrorState(errorMessage: e.toString()));
+      }
+    });
+
+    on<AddImageFromGalleryToPruefungDetailsEvent>((event, emit) async {
+      emit(PruefungDetailsLoadingState());
+      try {
+        final ImagePicker picker = ImagePicker();
+        final pickedFile = await picker.pickMedia();
+        if (pickedFile != null) {
+          final imageBytes = await pickedFile.readAsBytes();
+          final PruefungEntity editedPruefung = event.pruefungEntity;
+          editedPruefung.imageData.add(imageBytes);
+          await pruefungRepository.editPruefung(editedPruefung);
+          emit(PruefungDetailsLoadedState(pruefungEntity: editedPruefung));
+        } else {
+          emit(PruefungDetailsLoadedState(pruefungEntity: event.pruefungEntity));
+        }
+      } catch (e) {
+        emit(PruefungDetailsErrorState(errorMessage: e.toString()));
+      }
+    });
+
+    on<DeleteImageOfPruefungDetailsEvent>((event, emit) async {
+      emit(PruefungDetailsLoadingState());
+      try {
+        final imageBytes = event.image;
+        final PruefungEntity editedPruefung = event.pruefungEntity;
+        editedPruefung.imageData.remove(imageBytes);
+        await pruefungRepository.editPruefung(editedPruefung);
+        emit(PruefungDetailsLoadedState(pruefungEntity: editedPruefung));
       } catch (e) {
         emit(PruefungDetailsErrorState(errorMessage: e.toString()));
       }

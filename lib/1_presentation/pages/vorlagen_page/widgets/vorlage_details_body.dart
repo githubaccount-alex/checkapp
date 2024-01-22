@@ -65,7 +65,7 @@ class _VorlageDetailsBodyState extends State<VorlageDetailsBody> {
         leadingWidget: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            context.push(kDashboard);
+            context.go(kDashboard);
           },
         ),
         floatingActionButton: FloatingActionButton.extended(

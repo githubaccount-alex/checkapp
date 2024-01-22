@@ -25,6 +25,23 @@ class DeletePruefungDetailsEvent extends PruefungEvent {
   DeletePruefungDetailsEvent({required this.pruefungEntity});
 }
 
+class AddImageFromCameraToPruefungDetailsEvent extends PruefungEvent {
+  final PruefungEntity pruefungEntity;
+  AddImageFromCameraToPruefungDetailsEvent({required this.pruefungEntity});
+}
+
+class AddImageFromGalleryToPruefungDetailsEvent extends PruefungEvent {
+  final PruefungEntity pruefungEntity;
+  AddImageFromGalleryToPruefungDetailsEvent({required this.pruefungEntity});
+}
+
+class DeleteImageOfPruefungDetailsEvent extends PruefungEvent {
+  final PruefungEntity pruefungEntity;
+  final Uint8List image;
+  DeleteImageOfPruefungDetailsEvent({required this.pruefungEntity, required this.image});
+}
+
+
 class NoVorlagenForPruefungEvent extends PruefungEvent {}
 
 class ExportPruefungenToCsv extends PruefungEvent {}

@@ -37,11 +37,11 @@ class MainWidget extends StatelessWidget {
             onTap: (index) {
               String currentRoute = "/${ModalRoute.of(context)!.settings.name!}";
               if (index == 0 && kDashboard != currentRoute) {
-                context.go(kDashboard);
+                context.push(kDashboard);
               } else if (index == 1 && kPruefungen != currentRoute) {
-                context.go(kPruefungen);
+                context.push(kPruefungen);
               } else if (index == 2 && kVorlagen != currentRoute) {
-                context.go(kVorlagen);
+                context.push(kVorlagen);
               }
             },
             selectedItemColor: bottomNavbarIndex == -1 ? Colors.grey : Colors.pink.shade400,

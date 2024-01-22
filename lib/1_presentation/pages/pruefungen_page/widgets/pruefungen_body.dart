@@ -86,7 +86,7 @@ class _PruefungenBodyState extends State<PruefungenBody> {
               } else {
                 selectedVorlage = await _showSelectionDialog(context, widget.vorlagen);
                 if (selectedVorlage != null) {
-                  PruefungEntity emptyPruefung = PruefungEntity(id: UniqueID(), pruefer: null, datum: DateTime.now(), vorlage: selectedVorlage!);
+                  PruefungEntity emptyPruefung = PruefungEntity(id: UniqueID(), pruefer: null, datum: DateTime.now(), vorlage: selectedVorlage!, imageData: []);
                   BlocProvider.of<PruefungBloc>(context).add(CreateNewPruefungDetailsEvent(pruefungEntity: emptyPruefung));
                 }
               }

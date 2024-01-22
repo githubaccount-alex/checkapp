@@ -31,7 +31,7 @@ class _DashboardPageState extends State<DashboardPage> {
                 Card(
                   child: InkWell(
                     onTap: () {
-                      context.go(kPruefungen);
+                      context.push(kPruefungen);
                     },
                     child: const SizedBox(
                       width: 300,
@@ -52,7 +52,7 @@ class _DashboardPageState extends State<DashboardPage> {
                 Card(
                   child: InkWell(
                     onTap: () {
-                      context.go(kVorlagen);
+                      context.push(kVorlagen);
                     },
                     child: const SizedBox(
                       width: 300,

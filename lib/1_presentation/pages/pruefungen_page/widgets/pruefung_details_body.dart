@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:checkapp/3_domain/entities/pruefung_entity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -15,9 +17,11 @@ class PruefungDetailsBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final pruefungBloc = BlocProvider.of<PruefungBloc>(context);
+
     return PopScope(
-      onPopInvoked: (bool didPop) {
-        BlocProvider.of<PruefungBloc>(context).add(EditPruefungDetailsEvent(pruefungEntity: pruefungEntity));
+      onPopInvoked: (bool _) {
+        pruefungBloc.add(EditPruefungDetailsEvent(pruefungEntity: pruefungEntity));
       },
       child: MainWidget(
         showAppbar: true,
@@ -28,6 +32,26 @@ class PruefungDetailsBody extends StatelessWidget {
           onPressed: () {
             context.push(kDashboard);
           },
+        ),
+        floatingActionButton: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            FloatingActionButton(
+                heroTag: "btn1",
+                onPressed: () {
+                  pruefungBloc.add(AddImageFromCameraToPruefungDetailsEvent(pruefungEntity: pruefungEntity));
+                },
+                child: const Icon(Icons.camera_alt, color: Colors.white)),
+            const SizedBox(
+              height: 10,
+            ),
+            FloatingActionButton(
+                heroTag: "btn2",
+                onPressed: () {
+                  pruefungBloc.add(AddImageFromGalleryToPruefungDetailsEvent(pruefungEntity: pruefungEntity));
+                },
+                child: const Icon(Icons.file_copy, color: Colors.white)),
+          ],
         ),
         child: Padding(
           padding: const EdgeInsets.all(8.0),
@@ -46,17 +70,23 @@ class PruefungDetailsBody extends StatelessWidget {
                 style: const TextStyle(fontSize: 20),
               ),
               const Divider(),
-              ElevatedButton(
-                  onPressed: () {
-                    BlocProvider.of<PruefungBloc>(context).add(EditPruefungDetailsEvent(pruefungEntity: pruefungEntity));
-                  },
-                  child: const Text("Speichern")),
-              const Divider(),
-              ElevatedButton(
-                  onPressed: () {
-                    BlocProvider.of<PruefungBloc>(context).add(DeletePruefungDetailsEvent(pruefungEntity: pruefungEntity));
-                  },
-                  child: const Text("Löschen")),
+              Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                ElevatedButton(
+                    onPressed: () {
+                      pruefungBloc.add(EditPruefungDetailsEvent(pruefungEntity: pruefungEntity));
+                    },
+                    child: const Text("Speichern")),
+                const SizedBox(
+                  width: 20,
+                ),
+                const Divider(),
+                ElevatedButton(
+                    onPressed: () {
+                      pruefungBloc.add(DeletePruefungDetailsEvent(pruefungEntity: pruefungEntity));
+                    },
+                    child: const Text("Löschen")),
+
+              ]),
               const Divider(),
               Expanded(
                 child: ListView.builder(
@@ -74,6 +104,29 @@ class PruefungDetailsBody extends StatelessWidget {
                       );
                     }),
               ),
+              const Divider(),
+              if (pruefungEntity.imageData.isNotEmpty)
+                Expanded(
+                  child: ListView.builder(
+                      itemCount: pruefungEntity.imageData.length,
+                      itemBuilder: (context, index) {
+                        return Column(
+                          children: [
+                            Image.memory(
+                              pruefungEntity.imageData[index]!,
+                              height: 150,
+                            ),
+                            const SizedBox(height: 10),
+                            ElevatedButton(
+                                onPressed: () {
+                                  pruefungBloc.add(DeleteImageOfPruefungDetailsEvent(pruefungEntity: pruefungEntity, image: pruefungEntity.imageData[index]!));
+                                },
+                                child: const Text("Löschen")),
+                            const SizedBox(height: 10),
+                          ],
+                        );
+                      }),
+                ),
             ],
           ),
         ),
